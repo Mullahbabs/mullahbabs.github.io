@@ -342,7 +342,7 @@
 
 /*** Project Portfolio ***/
 #portfolio-flters li {
-    display: inline-block;
+    display: grid;
     font-weight: 500;
     color: #65B530;
     cursor: pointer;
