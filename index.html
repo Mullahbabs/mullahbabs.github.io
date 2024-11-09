@@ -133,7 +133,7 @@
                                 <h1 class="display-3 text-white animated slideInDown mb-4">Seventy <br> 7 <br> Soccer</h1>
                                 <p class="fs-5 text-white mb-4 pb-2">Re-defining international sports in Nigeria and beyond.</p>
                                 <a href="" class="btn btn-primary rounded-pill py-md-3 px-md-5 me-3 animated slideInLeft">Welcome</a>
-                                <a href="" class="btn btn-light rounded-pill py-md-3 px-md-5 animated slideInRight">Get Started</a>
+                                <a href="https://airtable.com/appcuZp11vEkFWk0T/pagT4aC9Mb3V7AnSh/form" class="btn btn-light rounded-pill py-md-3 px-md-5 animated slideInRight">Register</a>
                             </div>
                         </div>
                     </div>
@@ -546,12 +546,10 @@
                         <div class="bg-primary mb-3" style="width: 60px; height: 2px;"></div>
                         <h1 class="display-5 mb-5">Become Part of our Journey</h1>
                         <p class="mb-4 pb-2"><strong>Become part of our acedemy and whatever shabalaba ya'll choose to put here, have at it.</strong></p>
-                        <form
-                            action="https://formspree.io/f/mnnqadqz"
-                            method="POST"
-                            >
+                        <form id="waiver">
                             <div class="row g-3">
                                 <div class="col-12 col-sm-6">
+                                    <label>
                                     <input type="text" class="form-control border-0" placeholder="Your Name" style="height: 55px;">
                                 </div>
                                 <div class="col-12 col-sm-6">
@@ -570,6 +568,9 @@
                                 </div>
                                 <div class="col-12">
                                     <textarea class="form-control border-0" placeholder="Special Note"></textarea>
+                                </div>    
+                                <div class="col-12 col-sm-6">
+                                    <input type="checkbox" class="form-control border-0" name="waiver" placeholder="I accept the liability waiver" style="height: 55px;" required>  
                                 </div>
                                 <div class="col-12">
                                     <button class="btn btn-primary w-100 py-3" type="submit">Send us a message</button>
@@ -758,6 +759,62 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyA8QkcXd_e3737ZDKSnkdNK7xs4wR9T9nI",
+          authDomain: "seventy7soccer-6178f.firebaseapp.com",
+          projectId: "seventy7soccer-6178f",
+          storageBucket: "seventy7soccer-6178f.firebasestorage.app",
+          messagingSenderId: "438267669622",
+          appId: "1:438267669622:web:833de98b6bbc515e184357",
+          measurementId: "G-GDNX9N2L82"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+      </script>
+
+
+      <script>
+        document.getElementById("waiverForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+        
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const waiverAccepted = document.getElementById("waiver").checked;
+        
+            if (!waiverAccepted) {
+                alert("Please accept the liability waiver.");
+                return;
+            }
+        
+            try {
+                // Add a new document with form data to Firestore
+                await db.collection("waivers").add({
+                    name: name,
+                    email: email,
+                    waiverAccepted: waiverAccepted,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Form submitted successfully!");
+                document.getElementById("waiverForm").reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Failed to submit form. Please try again.");
+            }
+        });
+        </script>
+        
 </body>
 
 </html>
